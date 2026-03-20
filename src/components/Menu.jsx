@@ -1,15 +1,45 @@
 import React, { useRef, useState } from "react";
 import { sliderLists } from "../../constants";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 const Menu = () => {
   const contentRef = useRef();
+  const directionRef = useRef(1);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useGSAP(() => {
+    const fromX = directionRef.current === 1 ? -100 : 100;
+
+    gsap.fromTo("#title", { opacity: 0 }, { opacity: 1, duration: 1 });
+    gsap.fromTo(
+      ".details",
+      { opacity: 0 },
+      { opacity: 1, duration: 0.5, delay: 0.25 },
+    );
+    gsap.fromTo(
+      ".cocktail img",
+      { opacity: 0, xPercent: fromX },
+      { xPercent: 0, opacity: 1, duration: 1, ease: "power1.inOut" },
+    );
+  }, [currentIndex]);
+
   const totalCockTails = sliderLists.length;
 
   const goToSlide = (index) => {
     const newIndex = (index + totalCockTails) % totalCockTails;
 
     setCurrentIndex(newIndex);
+  };
+
+  const goToPrev = () => {
+    directionRef.current = -1;
+    goToSlide(currentIndex - 1);
+  };
+
+  const goToNext = () => {
+    directionRef.current = 1;
+    goToSlide(currentIndex + 1);
   };
 
   const getCocktailAt = (indexOffSet) => {
@@ -51,7 +81,12 @@ const Menu = () => {
                   ? "text-white border-white"
                   : "text-white/50 border-white/50"
               }`}
-              onClick={() => goToSlide(index)}
+              onClick={() => {
+                if (index !== currentIndex) {
+                  directionRef.current = index > currentIndex ? 1 : -1;
+                }
+                goToSlide(index);
+              }}
             >
               {cocktail.name}
             </button>
@@ -61,10 +96,7 @@ const Menu = () => {
 
       <div className="content">
         <div className="arrows">
-          <button
-            className="text-left"
-            onClick={() => goToSlide(currentIndex - 1)}
-          >
+          <button className="text-left" onClick={goToPrev}>
             <span>{prevCocktail.name}</span>
             <img
               src="/images/right-arrow.png"
@@ -73,10 +105,7 @@ const Menu = () => {
             />
           </button>
 
-          <button
-            className="text-left"
-            onClick={() => goToSlide(currentIndex + 1)}
-          >
+          <button className="text-left" onClick={goToNext}>
             <span>{nextCockTail.name}</span>
             <img
               src="/images/left-arrow.png"
