@@ -1,7 +1,48 @@
 import React from "react";
 import { openingHours, socials } from "../../constants";
+import { useGSAP } from "@gsap/react";
+import { SplitText } from "gsap/all";
+import gsap from "gsap";
 
 const Contact = () => {
+  useGSAP(() => {
+    const titleSplit = SplitText.create("#h2", { type: "words" });
+
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#contact",
+        start: "top center",
+      },
+      ease: "power1.inOut",
+    });
+
+    timeline
+      .from(titleSplit.words, {
+        opacity: 0,
+        yPercent: 100,
+        stagger: 0.02,
+      })
+      .from("#contact h2, #contact p", {
+        opacity: 0,
+        yPercent: 100,
+        stagger: 0.02,
+      })
+      .to("#f-right-leaf", {
+        y: "-50",
+        duration: 0.5,
+        ease: "power1.inOut",
+      })
+      .to(
+        "#f-left-leaf",
+        {
+          y: "50",
+          duration: 0.5,
+          ease: "power1.inOut",
+        },
+        "<",
+      );
+  });
+
   return (
     <footer id="contact">
       <img
@@ -20,7 +61,7 @@ const Contact = () => {
 
         <div>
           <h3>Visit Our Bar</h3>
-          <p>456, Raq Blvd. #404, Log Angeles, CA 90210</p>
+          <p>456, Raq Blvd. #404, Los Angeles, CA 90210</p>
         </div>
 
         <div>
@@ -39,7 +80,7 @@ const Contact = () => {
         </div>
 
         <div>
-          <h3>Socials</h3>
+          <h3>Socials:</h3>
         </div>
 
         <div className="flex-center gap-5">
