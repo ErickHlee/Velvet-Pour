@@ -16,6 +16,7 @@ const App = () => {
       <Cocktails />
       <About />
       <Art />
+      <div className="h-full"></div>
     </main>
   );
 };
