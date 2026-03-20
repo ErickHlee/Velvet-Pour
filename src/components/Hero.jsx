@@ -17,7 +17,7 @@ const Hero = () => {
 
     gsap.from(heroSplit.chars, {
       yPercent: 100,
-      duration: 5,
+      duration: 1.2,
       ease: "expo.out",
       stagger: 0.1,
     });
